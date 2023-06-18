@@ -4,17 +4,20 @@ from torch import nn
 def train_model(training_data, model, optimizer, epochs):
     criterion = nn.NLLLoss()
     train_losses = []
+    model.train()
+
+    cuda = torch.cuda.is_available()
+    if (cuda):
+        model.cuda()
 
     for epoch in range(epochs):
         running_loss = 0
         accuracy = 0
 
-        for iteration, (images, labels) in enumerate(training_data):
-            print(iteration)
-            if (iteration == 2):
-              return
-            # cuda_images = images.cuda()
-            # cuda_labels = labels.cuda()
+        for _iteration, (images, labels) in enumerate(training_data):
+            if (cuda):
+                images, labels = images.cuda(), labels.cuda()
+
             optimizer.zero_grad()
 
             predictions = model(images)
